@@ -67,20 +67,7 @@ else
 fi
 
 print_info "Installing TPM Packages"
-py=$(mktemp)
-cat << _EOF_ > $py
-#!/usr/bin/env python
-import pexpect
-tmux = pexpect.spawn("tmux")
-tmux.sendcontrol("w")
-tmux.send("I")
-tmux.sendcontrol("w")
-tmux.send("d")
-tmux.terminate()
-_EOF_
-chmod +x $py
-$py || exit
-rm $py
+~/.tmux/plugins/tpm/scripts/install_plugins.sh >/dev/null 2>&1 || exit
 update_info
 
 
