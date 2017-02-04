@@ -23,7 +23,7 @@ update_info() {
 sudo echo "test" >/dev/null || exit
 
 print_info "Installing dependencies"
-sudo apt-get install git python-pip python-dev build-essential -y >/dev/null 2>&1 || exit
+sudo apt-get install git gdb python-pip python-dev build-essential -y >/dev/null 2>&1 || exit
 update_info
 
 print_info "Installing vim+tmux"
