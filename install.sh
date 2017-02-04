@@ -22,6 +22,10 @@ update_info() {
 # Get correct permissions
 sudo echo "test" >/dev/null || exit
 
+print_info "Installing dependencies"
+sudo apt-get install git python-pip python-dev build-essential -y >/dev/null 2>&1 || exit
+update_info
+
 print_info "Installing vim+tmux"
 sudo apt-get install vim tmux -y >/dev/null 2>&1 || exit
 update_info
@@ -55,6 +59,18 @@ chmod +x $py
 $py || exit
 rm $py
 update_info
+
+read -p "Install YouCompleteMe? [y/n] " -n 1 resp
+echo
+if [[ $resp == "y" ]]; then
+    print_info "Installing YouCompleteMe"
+    sudo apt-get install nodejs nodejs-legacy npm -y >/dev/null 2>&1 || exit
+    CURR=$(pwd)
+    cd ~/.vim/bundle/YouCompleteMe
+    ./install.py --clang-completer --tern-completer >/dev/null 2>&1 || exit
+    cd "$CURR"
+    update_info
+fi
 
 echo "[*] Checking for Tmux Plugin Manager"
 if [ -d ~/.tmux/plugins ]; then
