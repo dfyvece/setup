@@ -1,5 +1,7 @@
 #!/bin/bash
 
+log_file=$(mktemp)
+
 backspace() {
     for i in $(seq 1 $1); do
         echo -n -e "\b"
@@ -19,19 +21,30 @@ update_info() {
     echo "+] $str"
 }
 
+something_went_wrong() {
+    echo
+    echo "Something went wrong! Check log file for details: $log_file"
+    read -p "Press any key to view log file or 'q' to exit" -n 1 resp
+    if [[ $resp != "q" ]]; then
+        less $log_file
+    fi
+    echo
+    exit
+}
+
 # Get correct permissions
-sudo echo "test" >/dev/null || exit
+sudo echo "test" >/dev/null || something_went_wrong
 
 print_info "Installing dependencies"
-sudo apt-get install git gdb python-pip python-dev build-essential -y >/dev/null 2>&1 || exit
+sudo apt-get install git gdb python-pip python-dev build-essential -y >>$log_file 2>&1 || something_went_wrong
 update_info
 
 print_info "Installing vim+tmux"
-sudo apt-get install vim tmux -y >/dev/null 2>&1 || exit
+sudo apt-get install vim tmux -y >>$log_file 2>&1 || something_went_wrong
 update_info
 
 print_info "Installing pexpect"
-sudo pip install pexpect >/dev/null 2>&1 || exit
+sudo pip install pexpect >>$log_file 2>&1 || something_went_wrong
 update_info
 
 echo "[*] Checking for Vundle"
@@ -40,7 +53,7 @@ if [ -d ~/.vim/bundle/Vundle.vim ]; then
 else
     print_info "Installing Vundle"
     mkdir -p ~/.vim/bundle/
-    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim || exit
+    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim >>$log_file 2>&1 || something_went_wrong
     update_info
 fi
 
@@ -56,7 +69,7 @@ vim.send(":qa!\n")
 vim.terminate()
 _EOF_
 chmod +x $py
-$py || exit
+$py >>$log_file 2>&1 || something_went_wrong
 rm $py
 update_info
 
@@ -64,10 +77,10 @@ read -p "Install YouCompleteMe? [y/n] " -n 1 resp
 echo
 if [[ $resp == "y" ]]; then
     print_info "Installing YouCompleteMe"
-    sudo apt-get install nodejs nodejs-legacy npm -y >/dev/null 2>&1 || exit
+    sudo apt-get install nodejs nodejs-legacy npm -y >>$log_file 2>&1 || something_went_wrong
     CURR=$(pwd)
     cd ~/.vim/bundle/YouCompleteMe
-    ./install.py --clang-completer --tern-completer >/dev/null 2>&1 || exit
+    ./install.py --clang-completer --tern-completer >>$log_file 2>&1 || something_went_wrong
     cd "$CURR"
     update_info
 fi
@@ -78,13 +91,13 @@ if [ -d ~/.tmux/plugins ]; then
 else
     print_info "Installing Tmux Plugin Manager"
     mkdir -p ~/.tmux/plugins
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm || exit
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm >>$log_file 2>&1 || something_went_wrong
     update_info
 fi
 
 print_info "Installing TPM Packages"
-~/.tmux/plugins/tpm/scripts/install_plugins.sh >/dev/null 2>&1 || exit
+~/.tmux/plugins/tpm/scripts/install_plugins.sh >>$log_file 2>&1 || something_went_wrong
 update_info
 
-
+rm $log_file
 echo "[+] Completed setup"
