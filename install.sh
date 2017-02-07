@@ -61,10 +61,11 @@ print_info "Installing Vundle Packages"
 py=$(mktemp)
 cat << _EOF_ > $py
 #!/usr/bin/env python
+import sys
 import pexpect
 vim = pexpect.spawn("vim")
 vim.send(":VundleInstall\n")
-vim.expect("Done!", timeout=-1)
+vim.expect("Done!", timeout=sys.maxint>>2)
 vim.send(":qa!\n")
 vim.terminate()
 _EOF_
