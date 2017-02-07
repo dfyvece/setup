@@ -51,7 +51,7 @@ cat << _EOF_ > $py
 import pexpect
 vim = pexpect.spawn("vim")
 vim.send(":VundleInstall\n")
-vim.expect("Done!")
+vim.expect("Done!", timeout=-1)
 vim.send(":qa!\n")
 vim.terminate()
 _EOF_
