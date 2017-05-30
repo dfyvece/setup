@@ -107,6 +107,14 @@ nmap N Nzz
 nmap } }zz
 nmap { {zz
 
+" Very magic
+nnoremap / /\v
+vnoremap / /\v
+cnoremap %s/ %smagic/
+cnoremap \>s/ \>smagic/
+nnoremap :g/ :g/\v
+nnoremap :g// :g//
+
 " Smart tab alignment function
 function! Align()
     let l:before = strlen(getline("."))
