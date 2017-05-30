@@ -19,6 +19,8 @@ Plugin 'tpope/vim-markdown'
 Plugin 'shime/vim-livedown'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'majutsushi/tagbar'
+Plugin 'coot/CRDispatcher'
+Plugin 'coot/EnchantedVim'
 
 call vundle#end()            " required
 filetype plugin indent on
@@ -106,14 +108,6 @@ nmap n nzz
 nmap N Nzz
 nmap } }zz
 nmap { {zz
-
-" Very magic
-nnoremap / /\v
-vnoremap / /\v
-cnoremap %s/ %smagic/
-cnoremap \>s/ \>smagic/
-nnoremap :g/ :g/\v
-nnoremap :g// :g//
 
 " Smart tab alignment function
 function! Align()
