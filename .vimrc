@@ -120,3 +120,11 @@ function! Align()
     endif
 endfunction
 nnoremap <Tab> :call Align()<CR>
+
+function! Spaces()
+    execute "%s/\v\t/    /g"
+endfunction
+
+function! Tabs()
+    execute "%s/\    /\t/g"
+endfunction
