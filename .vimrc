@@ -21,6 +21,7 @@ Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'majutsushi/tagbar'
 Plugin 'coot/CRDispatcher'
 Plugin 'coot/EnchantedVim'
+Plugin 'jacquesbh/vim-showmarks'
 
 call vundle#end()            " required
 filetype plugin indent on
@@ -42,6 +43,7 @@ set tabstop=4
 
 set smartindent
 set relativenumber
+set number
 
 " Fix backspace on mac
 set backspace=indent,eol,start
@@ -50,10 +52,21 @@ set backspace=indent,eol,start
 syntax on
 colorscheme molokai
 set foldmethod=syntax
+set foldclose=all
+set foldlevelstart=0
+set foldnestmax=1
 
 " Airline options
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
+
+let g:showmarks_marks = "abcdefghijklmnopqrstuvwxyz."
+autocmd TextChanged * DoShowMarks
+autocmd TextChangedI * DoShowMarks
+
+" Show tagbar
+autocmd VimEnter * TagbarOpen
+
 
 " YouCompleteMe options
 let g:ycm_min_num_of_chars_for_completion = 1
@@ -103,11 +116,11 @@ set undofile
 nnoremap ; :
 
 " Autocenter
-nmap G Gzz
-nmap n nzz
-nmap N Nzz
-nmap } }zz
-nmap { {zz
+nnoremap G Gzz
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap } }zz
+nnoremap { {zz
 
 " Smart tab alignment function
 function! Align()
@@ -120,3 +133,5 @@ function! Align()
     endif
 endfunction
 nnoremap <Tab> :call Align()<CR>
+
+nnoremap <c-h> :TagbarToggle<CR>
