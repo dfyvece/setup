@@ -60,19 +60,16 @@ set foldnestmax=1
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 
+" Mark options
 let g:showmarks_marks = "abcdefghijklmnopqrstuvwxyz."
 autocmd TextChanged * DoShowMarks
 autocmd TextChangedI * DoShowMarks
 
-" Show tagbar
-autocmd VimEnter * TagbarOpen
-
-
 " YouCompleteMe options
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 1
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"let g:ycm_confirm_extra_conf = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_python_binary_path = 'python'
 
@@ -134,4 +131,12 @@ function! Align()
 endfunction
 nnoremap <Tab> :call Align()<CR>
 
-nnoremap <c-h> :TagbarToggle<CR>
+" Enable hex editing via xxd
+function! ToXXD()
+    execute ":%!xxd"
+endfunction
+command! ToXXD call ToXXD()
+function! FromXXD()
+    execute ":%!xxd -r"
+endfunction
+command! FromXXD call FromXXD()
